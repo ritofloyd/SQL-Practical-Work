@@ -1,0 +1,110 @@
+---SQL JOIN Practice Questions 
+SELECT
+  *
+FROM
+  "RETAIL_DB"."SALES"."ORDERS"
+
+LIMIT
+  10;
+
+SELECT*
+FROM "RETAIL_DB"."SALES"."PRODUCTS"
+LIMIT 10;
+
+SELECT*
+FROM "RETAIL_DB"."SALES"."CUSTOMERS"
+LIMIT 10;
+------------------------------------------------------------------------------------
+--1. INNER JOIN: Orders with Customer and Product Names
+SELECT B.OrderID,
+       B.OrderDate,
+       A.CustomerName,
+       C.productName,
+       B.Quantity
+FROM "RETAIL_DB"."SALES"."ORDERS" AS B
+INNER JOIN "RETAIL_DB"."SALES"."CUSTOMERS" AS A
+ON A.CustomerID=B.CustomerID
+INNER JOIN "RETAIL_DB"."SALES"."PRODUCTS" AS C
+ON B.PRODUCTID = C.PRODUCTID;
+-------------------------------------------------------------------------------------
+--2. INNER JOIN: Customers Who Placed Orders
+SELECT A.CUSTOMERID,
+       A.CustomerName,
+       A.Country,
+       B.OrderID,
+       B.OrderDate
+FROM "RETAIL_DB"."SALES"."ORDERS" AS B
+INNER JOIN "RETAIL_DB"."SALES"."CUSTOMERS" AS A
+ON A.CustomerID=B.CustomerID;
+-------------------------------------------------------------------------------------
+--3. LEFT JOIN: All Customers and Their Orders
+SELECT A.CustomerID,
+       A.CustomerName,
+       A.Country,
+       B.OrderID,
+       B.OrderDate,
+       B.ProductID,
+       B.Quantity
+FROM "RETAIL_DB"."SALES"."CUSTOMERS" AS A
+LEFT JOIN "RETAIL_DB"."SALES"."ORDERS" AS B
+ON A.CustomerID=B.CustomerID;
+
+
+-------------------------------------------------------------------------------------
+--4. LEFT JOIN: Product Order Count
+SELECT C.ProductID,
+       C.ProductName,
+       COUNT(B.orderID) AS TotalOrders
+FROM "RETAIL_DB"."SALES"."PRODUCTS" AS C 
+LEFT JOIN "RETAIL_DB"."SALES"."ORDERS" AS B
+ON C.ProductID= B.ProductID 
+GROUP BY C.ProductID,C.ProductName;
+-------------------------------------------------------------------------------------
+--5. RIGHT JOIN: Orders with Product Info (Include Products Not Ordered)
+SELECT B.OrderID,
+       B.OrderDate,
+       C.ProductID,
+       C.ProductName,
+       C.Price,
+       B.Quantity
+FROM "RETAIL_DB"."SALES"."ORDERS" AS B
+RIGHT JOIN "RETAIL_DB"."SALES"."PRODUCTS" AS C
+ON C.ProductID=B.ProductID;
+-------------------------------------------------------------------------------------
+--6. RIGHT JOIN: Customer Info with Orders (Include All Customers)
+SELECT 
+    A.CustomerID,
+    A.CustomerName,
+    A.Country,
+    B.OrderID,
+    B.OrderDate,
+    B.ProductID,
+    B.Quantity
+FROM "RETAIL_DB"."SALES"."ORDERS" AS B
+RIGHT JOIN "RETAIL_DB"."SALES"."CUSTOMERS" AS A 
+    ON A.CustomerID = B.CustomerID;
+-------------------------------------------------------------------------------------
+--7. FULL OUTER JOIN: All Customers and All Orders 
+SELECT A.CustomerID,
+       A.CustomerName,
+       A.Country,
+       B.OrderID,
+       B.OrderDate,
+       B.ProductID,
+       B.Quantity
+FROM "RETAIL_DB"."SALES"."CUSTOMERS" AS A
+FULL OUTER JOIN "RETAIL_DB"."SALES"."ORDERS" AS B
+ON A.CustomerID=B.CustomerID;
+-------------------------------------------------------------------------------------
+--8. FULL OUTER JOIN: All Products and Orders 
+SELECT C.ProductID,
+       C.ProductName,
+       C.Price,
+       B.OrderID,
+       B.OrderDate,
+       B.CustomerID,
+       B.Quantity
+FROM "RETAIL_DB"."SALES"."PRODUCTS" AS C
+FULL OUTER JOIN "RETAIL_DB"."SALES"."ORDERS" AS B
+ON C.ProductID=B.ProductID;
+------------------------------------------
